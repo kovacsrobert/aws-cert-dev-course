@@ -1,0 +1,39 @@
+Lecture: ~20h -> full course with practice: ~40h -> daily 1:30h / 3 days a week -> 9 week -> deadline: Oct. 1
+
+
+Fundamentals:
+
+AWS Regions:
+	us-east-1a, us-east-1b, eu-central-1a
+		-> a/b is availability zones (AZ) (separated zones, min 3 data center)
+	console is region zoned
+	Global scoped services, pl: IAM
+	! mine: EU (Frankfurt)
+
+IAM - identity and access manager
+	user, groups, roles
+	root account (should not be used later)
+	services calls IAM for authentication/authorization (?)
+	policies are in JSON
+
+	user - for physical person
+	groups - function/teams grouping os users
+	roles - internal usage within AWS resources, for machines
+
+	Global view
+	MFA possible
+	predefined policies
+	least privilege priciples
+
+	IAM Federation - company auth, SAML
+
+	1 user per person
+	1 role per application
+	root account only for initial setup
+
+EC2 
+	virtual machines EC2 (Elastic Compute Cloud)
+	data storage/volume EBS (Elastic Block Storage)
+	load distribution ELB (Elastic Load Balancing)
+	scaling services/groups ASG (Auto Scaling Groups)
+	AMI - amazon machine image
