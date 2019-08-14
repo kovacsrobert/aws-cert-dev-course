@@ -17,7 +17,7 @@ IAM - identity and access manager
 	policies are in JSON
 
 	user - for physical person
-	groups - function/teams grouping os users
+	groups - function/teams grouping of users
 	roles - internal usage within AWS resources, for machines
 
 	Global view
@@ -31,9 +31,55 @@ IAM - identity and access manager
 	1 role per application
 	root account only for initial setup
 
-EC2 
+EC2
 	virtual machines EC2 (Elastic Compute Cloud)
 	data storage/volume EBS (Elastic Block Storage)
 	load distribution ELB (Elastic Load Balancing)
 	scaling services/groups ASG (Auto Scaling Groups)
-	AMI - amazon machine image
+	AMI - amazon machine image (specific for region)
+
+Security Groups
+	Controls in/out -bound traffic
+	EC2 firewall
+	Outside firewall, instance not seeing blocked inbound traffic
+	Locked to region
+	Default: all inbound is blocked, all outbound is allowed
+	Security group can be referenced by other sec. group or by itself
+
+Elastic IP
+	public IPv4, only for 1 instance until released
+		-> public IP is otherwise lost on restart
+
+EC2 User Data
+	bootstrap machine at first start
+	runs with root user
+example:
+	#!/bin/bash
+	yum update -y
+	yum install -y httpd.x86_64
+	systemctl start httpd.service
+	systemctl enable httpd.service
+	echo "Hello world from $(hostname -f)" > /var/www/html/index.html
+
+EC2 Instance Launch types
+	- On demand - short workload
+	- Reserved - long workload
+	- Converible - long workload with flexible instances
+	- Scheduled reserved - for example weekly instance
+	- Spot - cheap, can lose instance, 2 min notification
+	- Dedicated - only 1 customer on 1 hardware
+	- Dedicated Host - entire server for 1 customer, instance placement
+
+EC2 Pricing
+	per hour based on: (first minute is billed by second)
+		- region
+		- instance type
+		- launch type
+		- OS type
+		- IP, other nwetwork features
+
+EC2 Types: > 50 types based around: RAM, CPU, I/O, Network, GPU
+	M - balanced (np GPU)
+	R/C/P/.. - specialized
+	T2/T3 - burstable (short big load handling, uses CPU credit)
+	T2 unlimited - no loose perfomance, but billed
