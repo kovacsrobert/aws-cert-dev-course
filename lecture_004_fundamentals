@@ -1,0 +1,58 @@
+Lecture 4: Loadbalancing
+
+ELB
+	AWS managed load balancer (, or can be used self managed one)
+	types:
+		classic, v1 - old generation 2009
+		application load balancer, v2 - new gen 2016
+		network load balancer, v2 - new gen 2017
+
+Health checks
+	which node are up
+
+Application Load Balancer v2 (HTTP/HTTPS/Websocket)
+	Standin between client and EC2
+	usage:
+		multiple http application across machines (target groups)
+		multiple application on same machines (containers)
+		...
+	dynamic port mapping
+	stickiness (ALB level, not application)
+	support: HTTP/HTTPS/Websocket
+	X-Forwarded-For/X-Forwarded-Proto - IP of client
+	good with ECS (Docker)
+
+Network Load Balancer v2 (TCP)
+	Similar to ALB
+	high thoughput
+	does not see client IP
+
+Classic Load Balancer - deprecated
+	
+All load balancer:
+	has static host name
+	can scale, but not immidiatelly
+
+Auto Scaling Group (ASG)
+	add/remove instances (scale out/in)
+	min/desired/max
+	auto scaling alarm (all type of metrics)
+	ASG free
+
+EBS volume
+	network drive
+	locked to Availability Zone (AZ)
+	can be moved with snapshots
+	types: GP2 (SSD), IOI (SSD), STI (HDD), SCI (HDD)
+	volume can be increased
+	snapshot only contain the data, not the full drive
+	encryption: rest, encrypt-in-flight, snapshots encrypted, volumes created from snapshots also encrypted, minimal impact on latency, KMS (AES-256)
+	attach to only 1 node at a time
+
+Instance Store
+	physically attached to machine
+	no root EBS volume
+	better IO perfomance
+	termination store is wiped
+	no resize
+	no backup support, only manually
