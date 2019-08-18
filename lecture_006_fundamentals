@@ -1,0 +1,144 @@
+Lecture 6:
+
+Amazon S3 (AWS S3)
+	buckets
+		bucket - directory (globally unique name, naming convention)
+		object - file (key name that is the filepath)
+	defined region level
+	max size 5 TB
+	multipart upload is file is > 5 GB
+	versioning - bucket level setting
+		'null' value for not versioned items
+	encryption (4 method)
+		SSE-S3 - keys managed by AWS S3
+			server side
+			keys not visible
+			AES-256
+			header needed "x-amz-server-size-encryption" : "AES256"
+		SSE-KMS - AWS Key Management Service
+			server side
+			keys handled by KMS - user control, audit trail
+			header needed "x-amz-server-size-encryption" : "aws:kms"
+		SSE-C - manual key managedment
+			server side
+			manual key handle outside of AWS
+			https must be used
+			key must be provided in HTTP header
+		Client side enryption
+			use Amazon S3 encryption client library
+			SSL/TLS (encryption in-flight) recommmened
+	security (2 type, 4 method)
+		user based - IAM policies
+		resource based
+			Bucket policies - json, resource/action/effect (allow/deny)/principal
+			Object (File) ACL
+			Bucket ACL
+		logging, auditing
+		API calls logged in AWS CloudTrail
+		user security: MFA, signed URL (1 url for 1 user/group, expire)
+	static websites
+		open to public, redirects url to generated root
+	CORS (cross-origin resource sharing)
+		limit website that can request your files (limit the cost)
+	Consistency model
+		PUT new - read after write consistency (only if it was not queried shortly before)
+		DELETE and PUT existing - could be older version
+		request are cached
+	Performance
+		1000 TPS (transactions per second)
+		old trick: random prefix (4 chars) to partition data (no dated as prefix)
+		2018 july - 3500 TPS for PUT, 5500 TPS for GET
+			no need to prefix anymore
+			this is not in the exam
+		multipart upload (for example: 100 MB parts)
+			5 GB is the limit
+			recommended anything > 100 MB
+		CloudFront caches objects
+		S3 Transfer Acceleration - change the endpoint where to download closer
+		SSE-KMS encryption can be bottleneck
+	Glacier
+		long term archival for S3
+		retrieve only subset for performance
+		glacier select
+			works with csv, json, parquet
+			supports gzip, bzip2
+			no subqueries or joins supported
+
+*** SE3 bucket policy example 1
+
+{
+    "Version": "2012-10-17",
+    "Id": "Policy1566118839883",
+    "Statement": [
+        {
+            "Sid": "Stmt1566118836644",
+            "Effect": "Deny",
+            "Principal": "*",
+            "Action": "s3:PutObject",
+            "Resource": "arn:aws:s3:::the-bucket-of-the-bob/*",
+            "Condition": {
+                "Null": {
+                    "s3:x-amz-server-side-encryption": "true"
+                },
+                "StringNotEquals": {
+                    "s3:x-amz-server-side-encryption": "AES256"
+                }
+            }
+        }
+    ]
+}
+
+*** SE3 bucket policy example 2
+
+{
+  "Id": "Policy1566119190071",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1566119152689",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Effect": "Deny",
+      "Resource": "arn:aws:s3:::the-bucket-of-the-bob/*",
+      "Condition": {
+        "Null": {
+          "s3:x-amz-server-side-encryption": "true"
+        }
+      },
+      "Principal": "*"
+    },
+    {
+      "Sid": "Stmt1566119188273",
+      "Action": [
+        "s3:PutObject"
+      ],
+      "Effect": "Deny",
+      "Resource": "arn:aws:s3:::the-bucket-of-the-bob/*",
+      "Condition": {
+        "StringNotEquals": {
+          "s3:x-amz-server-side-encryption": "AES256"
+        }
+      },
+      "Principal": "*"
+    }
+  ]
+}
+
+*** SE3 bucket policy example 3
+
+{
+  "Id": "Policy1566120064008",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1566120062408",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::the-bucket-of-the-bob/*",
+      "Principal": "*"
+    }
+  ]
+}

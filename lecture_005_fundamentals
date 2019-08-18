@@ -1,0 +1,44 @@
+Lecture 5:
+
+Route 53
+	Managed DNS
+	rules and record that help to identify server thorugh URL
+	Record types
+		A - URL to IPv4
+		AAAA - URL to IPv6
+		CNAME - URL to URL
+		Alias - URL to AWS resource (prefered over CNAME)
+	public vs private domain (resolve only in VPC)
+
+Relational Database Service (RDS)
+	Managed service
+	continuos backup (daily full backup, trasnaction log in real time, 7-35 day retention), also manual snapshot
+	restore support (any time)
+	monitoring dashboard
+	read replicas (max 5?), async replication, can be promoted, connection string changes
+	multi AZ (disaster recovery), sync replication, only 1 DNS active for failover
+	scaling (vertical and horizontal)
+	no SSH into machine
+	rest capability encryption
+	ssl cert to in-flight encrption
+	ssl can be enforced, need db script
+	
+ElastiCache
+	Managed caching
+	Redis (key-value persistent) and Memcached (object-based non-persistent)
+	write scaling - sharding
+	read scaling - read replicas
+	multi AZ failover
+	other features (monitoring, ...)
+
+ElastiCache patterns
+	caching is good for read-heavy apps & compute-intensive workload
+	Lazy-loading
+	WriteThrough - write cache when add/update/delete data
+
+ Virtual private cloud (VPC)
+ 	contains subnets that mapped to AZ
+ 	public/private subnets
+ 	VPC flow log
+ 	VPCs are account per region
+ 	
