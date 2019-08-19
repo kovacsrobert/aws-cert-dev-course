@@ -1,0 +1,68 @@
+Lecture 8 - ElasticBeanStalk:
+
+Managed deployment of applications
+Managed service
+
+3 architecture model:
+	single instance model (good for dev)
+	LB + ASG model (prod, pre-prod) - High Availability mode
+	ASG only (non-web apps, workers, ..)
+
+3 component:
+	application
+	application version
+	enviroment (free naming)
+
+Deploy/Rollback versions
+Full control over lifecycle of environments
+Many supported platform
+
+Deployment modes:
+	All at once - fastest with downtime
+	Rolling - update few at once (bucket - number of instances to deploy at once)
+	Rolling with additional batches - Rolling, but keeps old instances, runs at capacity, additional cost
+	Immutable - full deployment, swap if everything is deployed already, temp ASG, longest deployment, but quick rollback
+
+Blue/Green (another Deployment node)
+	new stage environment of BeanStalk
+	new environment can be validated separatelly
+	Route 53 will swap in the end, or slowly transfer % of traffic to green/new environment
+
+Extensions:
+	zip archive
+	config parameters can be handled in .ebextensions/ dir
+		modify default settings
+		add resources (RDS, ElasticCache, ...)
+
+EB CLI
+	works with ElasticBean from CLI
+
+Cloudformation
+	AWS Service
+	EB relies on it
+
+Can works HTTPS
+	multiple ways to provide key: Console, ebextensions, ACM (AWS Cert Manager)
+	port 443 open
+
+Redirect HTTP to HTTPS
+	config all instances
+	or config ALB
+	make sure health check is not redirected
+
+EB lifecycle policy
+	max 1000 app versions -> remove old with licycle policy (2 types: based on time, based on number of versions)
+
+Web server vs Worker environments
+	decouple application into dedicated long-running workers
+	cron.yaml - define periodic tasks
+
+RDS
+	Separate prod (or any important DB) from EB, these are always kept between deployment
+	Steps if it is coupled:
+		- take RDS snapshot
+		- enable deletion protection for RDS
+		- add new environment without RDS, point to existing RDS
+		- perform blue/green deployment
+		- terminate old environment (RDS will be kept)
+		- delete CloudFormation stack (will be in DELETE_FAILED state because of RDS kept)
