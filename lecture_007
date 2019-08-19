@@ -1,0 +1,26 @@
+Lecture 7 - CLI fundamentals
+
+CLI config
+	no key copy to EC2
+
+Hands-on
+	Roles & Policies
+	AWS Policy simulator
+	dry-run
+	STS message decode
+
+Meta-data: http://169.254.169.254/latest/meta-data
+	only on VPC ?
+	info about EC2 instance
+	no need for policy authonrization
+
+SDK
+	AWS CLI uses Python SDK (boto3)
+	AWS CLI default region is us-east-1
+	Credentials by default ~/aws/credentials
+	Environment variables can be used for CLI
+	exponential backoff - failing API calls wait exponential time
+
+AWS Profiles
+	aws configure --profile [profile_name]
+	change profile with AWS_DEFAULT_PROFILE env variable

@@ -8,7 +8,7 @@ AWS Regions:
 		-> a/b is availability zones (AZ) (separated zones, min 3 data center)
 	console is region zoned
 	Global scoped services, pl: IAM
-	! mine: EU (Frankfurt)
+	! mine: EU (Frankfurt) - eu-central-1 - apigateway.eu-central-1.amazonaws.com
 
 IAM - identity and access manager
 	user, groups, roles
