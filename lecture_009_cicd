@@ -38,3 +38,44 @@ CodePipeline:
 	Stages have multiple ActionGroups
 	ActionGroups have multiple Actions
 	Action are executed paralel ?
+
+CodeBuild:
+	Building and testing application
+	Fully managed build service: continuos scaling, no server to manage, no build queue
+	Pay only for usage
+	Leverages Docker for reproducible builds - builds running container first
+		possible to create base Docker image to build
+	Containers are deleted at the end of their execution (success or failed)
+	Integrate with Github, CodeCommit, ...
+	Build instruction: /buildspec.yml
+	Output log to S3 & CloudWatch
+	Metrics to monitor build statistics
+	CloudWatch Alarms, CloudWatch Events, AWS Lambda as a Glue (?), SNS notification
+	buildspec.yml
+		pull parameters from environemnt - SSM Parameter Store
+		phases: install dependencies, pre-build, execute build commands, post-build
+	output artifact encrypted with KMS
+	can use cache to speed up dependencies fetch
+	can run build locally with CodeBuild Agent, have access to all logs and more ..
+
+CodeDeploy:
+	Managed service, goal is automatic deploy to multiple EC2 that not managed by EB
+	3rd party options: Ansible, Terraform, Chef, Puppet
+	all EC2 must be running CodeDeploy Agent
+	EC2 instances are grouped
+	Can be chained into CodePipeline
+	/appspec.yml will be polled by EC2 instances
+		file section: how to source and copy from S3/GitHub
+		hooks: instructions to deploy, order is (mostly optional):
+			ApplicationStop
+			DownloadBundle
+			BeforeInstall
+			AfterInstall
+			ApplicationStart
+			ValidateService
+	Failed deploy leaves instances in failed state
+
+CodeStar:
+	Integration solution for all AWS CICD services
+	Issue tracking: JIRA, Github Issues
+	Free service, only paying for underlying services
