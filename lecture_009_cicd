@@ -1,0 +1,40 @@
+Lecture 9 - CICD:
+
+AWS CodeCommit - store code, like Github
+AWS CodePipeline - automated pipeline from code to EB
+AWS CodeBuild - build and test the code, like Jenkins
+AWS CodeDeploy - deploy code to EC2 (not EB)
+
+CI: code push, build & test code, feedback (find & fix bug early, deliver faster, deploy often)
+CD: deployment can happen automcatically often & fast
+
+CodeCommit and CodeBuild can be switch with 3rd party application (Jenkins,..)
+
+CodeCommit:
+	Managed version control
+	Authentication: ssh keys, https (cli creds or new https creds), MFA
+	Authorization: IAM policies
+	Automatic encryption with KMS
+	Cross Account access: IAM Role, AWS STS with AssumeRole API
+	vs Github:
+		Github Users vs AWS IAM users & roles
+		Hosted by Github/Self-hosting vs AWS
+		UI is better for Github
+	Notification: 
+		could be complex, like analyse code, etc..
+		AWS CloudWatch Event Rules - PR events, Repo management events
+		Triggers: AWS SNS, AWS Lambda - branch events, push to branch
+
+CodePipeline:
+	Orchestration & continuos delivery
+	Works with artifacts (AWS S3)
+		source output artifacts from CodeCommit
+		build output artifacts from CodeBuild
+	Troubleshooting
+		pipeline state change creates a AWS CloudWatch event, which can create a SNS notification
+		failure stops pipeline, information on console
+		AWS CloudTrail can audit AWS API calls
+		Pipeline usually need some IAM Role, these needs to be checked
+	Stages have multiple ActionGroups
+	ActionGroups have multiple Actions
+	Action are executed paralel ?
