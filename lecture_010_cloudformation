@@ -1,0 +1,86 @@
+Lecture 10 - AWS CloudFormation:
+
+"Infrastructure as code" - Replace manual work (clicking) with code
+Declarative way to outline AWS infrastructure
+YAML and JSON supported (YAML prefered)
+
+Stack - created and named infrastructure instance
+	created from template, updated with template, removes all components at delete
+	Identified by name
+	Multiple stack can be created for different purpose, separation of concern
+	can be upgraded with modified template
+
+Template - blueprint for infrastructure
+	stored in S3
+	components
+		resources (aws components)
+			names are prefixed with stack name
+		parameters: dynamic inputs
+		mappings: static variables
+		outputs: refereces as recources
+		conditionals
+		metadata
+	designer - help with understanding component connection
+
+YAML
+	key-value pairs
+	nested objects
+	arrays supported (prefixed with '-')
+	multiline string supported
+	comments
+
+Resources
+	mandatory
+	aws component
+	declared and reference each other
+	> 224 type
+	identifier pattern: AWS::aws-product-name::data-type-name (AWS::EC2::Instance)
+	no dynamic resources (aka code generation)
+	almost every AWS service supported
+
+Parameters
+	input to template
+	has a type:
+		String, Number, CommaDelimitedList, List<Type>, AWS Parameter (match against existing values)
+	has description:
+	has constraints
+	has constraintDescription (String)
+	min/max
+	allowedValues
+	allowedPattern
+	noEcho (boolean) - for like password
+	Fn:Ref - reference parameter or other (!Ref)
+	pseudo parameters - enabled by default, example: AWS::AccountId, AWS::NoValue
+
+Mappings
+	fixed variables, must be declared
+	multiple mapping supported (like 2 key combined)
+	Fn::FindInMap - !FindInMap[MapName, TopLevelKey, SecondKey]
+		example: !FindInMap[RegionMap, !Ref "AWS::Region", 32]
+
+Outputs
+	optional exports
+	import output in other templates, by linking templates, cross stack collaboration
+		Fn:ImportValue (!ImportValue SSHSecurityGroup)
+		can only import what was exported (Export keyword)
+	cannot delete stack if output is used/referenced
+	exported name must be unique within region
+
+Conditions
+	can reference other condition, parameter value or mapping
+		example create: CreateProdResources: !Equals [!Ref EnvType, Prod]
+		example use: Condition: CreateProdResources
+
+Intrisic functions
+	Fn::Ref (!Ref) - reference parameter, resource (return resource ID)
+	Fn::GetAtt (!GetAtt) - get resouce exposed attributes (detailed in docs)
+	Fn::FindInMap (!FindInMap) - find value in mapping
+	Fn::ImportValue (!ImportValue) - import exported value in other template
+	Fn::Join (!Join) - concatenate values
+	Fn::Sub (!Sub) - substitute values
+	Fn::And, Fn::Or, Fn::Equals, Fn::Not, Fn::If
+
+Rollbacks
+	default rollback deletes everything
+	option to disable rollback for troubleshooting
+	update fails rollback previous green state
