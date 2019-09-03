@@ -1,0 +1,82 @@
+Lecture 11 - AWS Monitoring:
+
+latency, outages, throubleshooting
+
+Cloudwatch:
+	metrics
+		variable to monitor
+		group by namespace (usually AWS service names ?)
+		max 10 dimension (attribute of metric) per metric
+		have timestamp
+	logs
+		app can send logs to CloudWatch using SDK
+		log agents for on-premise instances
+		can be exported to S3 as archive
+		log storage architecture:
+			log groups - arbitrary name, application name
+			log stream - instance/log file/container name
+		IAM permission needed
+		encrypted with KMS
+	events
+		notification for certain events
+		2 type:
+			schedule with cronjob
+			event pattern to trigger event
+		event creates small json document containing information
+	alarms
+		trigger notification for any metric
+		react in real-time to metrics/events
+		alarm state: ok, insufficient data, alarm
+		period: length of time to evaluate metric
+
+Detailed monitoring:
+	EC2 instance measure metrics every 5 minutes
+	Extra cost to lower this to for example every 1 minute
+	Free tier allow 10 detailed monitoring
+
+Custom metrics
+	define own metric in Cloudwatch
+	use metric dimensions (attributes)
+	metric resolution: default 1 minute, high resolution can be up to 1 second with higher cost
+	PutMetricData Api call
+	exponential backoff stategy
+
+***
+
+X-Ray:
+	distributed tracing of microservices
+	throubleshooting performace and errors
+	understand dependencies in microservices
+	pinpoint problems
+	compatible with most AWS services
+	leverage tracing - following request. each component has its own trace
+		segment - single component/service log
+		trace - collected segments for 1 request (2e2)
+	IAM authorization - every application needs role
+	2 integration step
+		use SDK
+			need to import AWS X-Ray SDK
+			capture call to AWS service, HTTP(s) DB, Queue calls
+		X-Ray daemon
+			install X-Ray daemon
+			enable X-Ray AWS integration
+				on-premise instance need AWS creds
+			low level UDP packer interceptor
+			AWS services enables daemon automatically
+			each application needs IAM role to write to x-Ray
+			run on EC2 instance, aggregate traces, every second it send traces to X-Ray in bulk
+			example: beanstalk use .ebextension to enable X-Ray
+			can be configured to send traces cross accounts, needed IAM permission
+	service map computed automatically
+	sampling - reduce amount of request sent to X-Ray, avoid flooding, reduce cost
+	annotations - key-value pairs to used to index traces and used for searching
+	metadata - key-value pairs, not indexed
+
+***
+
+Cloudtrail:
+	internal monitoring of history of events/API calls
+	audit changes to AWS resources
+	can be put CloudTrail logs into CloudWatch
+	if resource deleted, CloudTrail is the first place to look
+	
