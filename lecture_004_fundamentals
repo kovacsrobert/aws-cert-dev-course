@@ -20,7 +20,7 @@ Application Load Balancer v2 (HTTP/HTTPS/Websocket)
 	stickiness (ALB level, not application)
 	support: HTTP/HTTPS/Websocket
 	X-Forwarded-For/X-Forwarded-Proto - IP of client
-	good with ECS (Docker)
+	good with ECS - Elastic Container Service (Docker)
 
 Network Load Balancer v2 (TCP)
 	Similar to ALB

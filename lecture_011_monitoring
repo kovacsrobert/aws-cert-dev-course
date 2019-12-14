@@ -51,7 +51,7 @@ X-Ray:
 	compatible with most AWS services
 	leverage tracing - following request. each component has its own trace
 		segment - single component/service log
-		trace - collected segments for 1 request (2e2)
+		trace - collected segments for 1 request (e2e)
 	IAM authorization - every application needs role
 	2 integration step
 		use SDK

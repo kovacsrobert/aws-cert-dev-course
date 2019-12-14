@@ -37,7 +37,7 @@ CodePipeline:
 		Pipeline usually need some IAM Role, these needs to be checked
 	Stages have multiple ActionGroups
 	ActionGroups have multiple Actions
-	Action are executed paralel ?
+	Action are executed parallel ?
 
 CodeBuild:
 	Building and testing application

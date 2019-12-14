@@ -12,7 +12,7 @@ Route 53
 
 Relational Database Service (RDS)
 	Managed service
-	continuos backup (daily full backup, trasnaction log in real time, 7-35 day retention), also manual snapshot
+	continuos backup (daily full backup, transaction log in real time, 7-35 day retention), also manual snapshot
 	restore support (any time)
 	monitoring dashboard
 	read replicas (max 5?), async replication, can be promoted, connection string changes
@@ -36,7 +36,7 @@ ElastiCache patterns
 	Lazy-loading
 	WriteThrough - write cache when add/update/delete data
 
- Virtual private cloud (VPC)
+Virtual private cloud (VPC)
  	contains subnets that mapped to AZ
  	public/private subnets
  	VPC flow log

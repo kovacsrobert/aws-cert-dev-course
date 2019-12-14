@@ -1,6 +1,6 @@
 Lecture 6:
 
-Amazon S3 (AWS S3)
+Amazon S3 (AWS S3 - Simple Storage Service)
 	buckets
 		bucket - directory (globally unique name, naming convention)
 		object - file (key name that is the filepath)
@@ -19,14 +19,14 @@ Amazon S3 (AWS S3)
 			server side
 			keys handled by KMS - user control, audit trail
 			header needed "x-amz-server-size-encryption" : "aws:kms"
-		SSE-C - manual key managedment
+		SSE-C - manual key management
 			server side
 			manual key handle outside of AWS
 			https must be used
 			key must be provided in HTTP header
 		Client side enryption
 			use Amazon S3 encryption client library
-			SSL/TLS (encryption in-flight) recommmened
+			SSL/TLS (encryption in-flight) recommended
 	security (2 type, 4 method)
 		user based - IAM policies
 		resource based

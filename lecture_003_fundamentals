@@ -1,4 +1,4 @@
-Lecture: ~20h -> full course with practice: ~40h -> daily 1:30h / 3 days a week -> 9 week -> deadline: Oct. 1
+Lecture: ~20h -> full course with practice: ~40h -> daily 1:30h / 3 days a week -> 9 week -> deadline: Dec. 1
 
 
 Fundamentals:
@@ -41,7 +41,7 @@ EC2
 Security Groups
 	Controls in/out -bound traffic
 	EC2 firewall
-	Outside firewall, instance not seeing blocked inbound traffic
+		Outside firewall, instance not seeing blocked inbound traffic
 	Locked to region
 	Default: all inbound is blocked, all outbound is allowed
 	Security group can be referenced by other sec. group or by itself
