@@ -1,0 +1,83 @@
+Lecture 12 - AWS Integration and Messaging:
+
+sync vs async (event-based) communication
+
+SQS - queue model
+SNS - pub/sub
+Kinesis - real-time streaming model
+
+SQS - Simple Queue Service
+	over 10 year old
+	fully managed
+	built-in scaling (horizontal scaling)
+	default retention of message: 4 days, max: 14 days
+	no limit on messages
+	low latency (< 10 ms)
+	can have duplicate messages
+	can have out of order messages
+	limit 256 KB per message, apart from metadata
+	delay queue - default 0 sec, max 15 min
+		can be queue config
+		can be message config
+	produce message:
+		- body (max 256 KB)
+		- optional metadata
+		- optional delay delivery config
+	produce message returns:
+		- message id
+		- md5 of message body
+		- md5 of message attributes
+	consume message:
+		- poll max 10 message at once
+		- process message with visibility timeout
+		- delete message after process with id and receipt handle
+	visibility timeout:
+		- polled message become invisible to other consumers for this period
+		- default 30 sec, max 12 hours
+		- ChangeMessageVisibility API
+		- DeleteMessage API
+	dead letter queue:
+		- threashold how many times can a message fail to be processsed
+		- redrive policy
+		- receive count show how many times was it polled
+	long polling
+		- request message and wait until 1 arrives
+		- wait time: 1-20 sec
+		- preferred vs short polling
+		- WaitTimeSeconds API
+	CLI practice:
+		- send-message
+		- receive message
+		- delete-message
+	FIFO queue
+		- not available in every region
+		- name must end in .fifo ?
+		- lower throughput
+		- keeps order, and no duplication
+		- no message delay
+		- deduplication
+			- could be based on either:
+				- MessageDeduplicationId in message
+				- SHA-256 of message body - MessageDeduplicationId is generated
+		- sequencing
+			- specify strict ordering between messages with same group id
+			- MessageGroupId
+	Extended client
+		- accept messages larger than 256 KB
+		- java lib
+		- uses S3 bucket
+			- put message to S3
+			- send smaller message with pointer to SQS
+			- consumer gets large message from S3 through pointer
+	Security
+		- https - encryption-in-flight
+		- SSE - server-side-encryption using KMS
+			- only encrypt message body, not metadata
+		- SQS queue access policy
+			- IP, time-based access
+	API
+		CreateQueue, DeleteQueue
+		PurgeQueue
+		SendMessage, ReceiveMessage, DeleteMessage
+		ChangeMessageVisibility
+		Batch-message-commands
