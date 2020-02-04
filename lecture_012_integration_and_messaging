@@ -81,3 +81,72 @@ SQS - Simple Queue Service
 		SendMessage, ReceiveMessage, DeleteMessage
 		ChangeMessageVisibility
 		Batch-message-commands
+
+SNS - Simple Notification Service
+	1 producer, multiple receivers/subscribers
+	topic based subscribtion
+	100k topic limit
+	10 million subscriber per topic
+	need to process message on publish by the consumer
+	subscriber:
+		sqs, http/https, lambda, email, sms, ..
+	integrates with lot of aws service
+	2 types of publish:
+		topic (main use)
+		direct (mobile apps sdk)
+	SNS + SQS: Fan Out
+		publish to 1 topic, and multiple SQS receives the message through SNS
+		fully decoupled
+		no data loss
+		delay process
+
+Kinesis
+	managed alternative to Apache Kafka (big data streaming tool)
+	real-time big data, real-time computation
+	Kinesis Streams: low latency srteaming ingest at scale
+	Kinesis Analytics: perform real-time analysis on streams using SQL
+	Kinesis FireHose: load streams into S3, Redshift, ElasticSearch
+
+Kinesis Streams
+	Shards:
+		1 queue, "like lane on highway"
+		1 MB/s or 1k messages/s per shard
+		2 MB/s per shard
+		ordered messages in shards
+		reshared - adding shard(s)
+		merge - removing shard(s)
+	Partitions:
+		PutRecords used to send message to Kinesis
+		needs partition key, hashed to determine shard key
+		partition key needs to be highly distributed (to prevent "hot partition")
+	data retention default 1 day, max 7 days
+	ability to reprocess, replay data
+	once data inserted, it is immutable
+	billing is per shareds
+	batching with PutRecords
+	ProvisionedThroughputExceeded exception
+	consumer - cli, sdk, kinesis client library
+
+Kinesis KCL (Kinesis Client Library)
+	distibuted apps sharing read workload
+	1 shard read by only 1 KCL instance
+	progress is checkpointed into DynamoDB (needs IAM role)
+
+Kinesis Security
+	IAM policies
+	encrpytion in flight with https
+	encryption at rest with KMS
+	ecrypt/decrypt data on client side (custom impl)
+	VPC endpoints
+
+Kinesis Data Analytics
+	real-time analytics using SQL
+	auto-scaling
+	managed by aws
+	pay for actual consumption
+
+Kinesis Firehose
+	fully managed
+	near real-time (60s latency)
+	load data into Redshift/AWS S3/ElasticSearch/Splunk
+	support many data format
