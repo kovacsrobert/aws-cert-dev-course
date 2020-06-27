@@ -1,0 +1,66 @@
+Lecture 13 - AWS Serverless lambda:
+
+Serverless - no server management anymore (db, storage, ..), scales automatically
+
+	AWS Lambda
+	DynamoDb
+	AWS Cognito
+	AWS API Gateway
+	Amazon S3
+	AWS SNS & SQS
+	AWS Kinesis Data Firehose
+	Aurora Serverless
+	Step Functions
+	Fargate
+
+AWS Lambda:
+	virtual functions - no servers to manage
+	limited by time - short execution (15 min)
+	run on-demand
+	scaling is automated
+	benefits:
+		easy pricing
+		integrated with AWS services
+		integrated with programming languages (but not Docker, that for EC2)
+		easy monitoring wiht AWS CloudWatch
+		3GB RAM per function -> increase CPU and network
+	min 128 MB RAM usage
+	types:
+		Syncronous invocation - wait for returned result
+		ALB or Api Gateway - HTTP request to JSON and JSON-to-HTTP
+			multiheader values
+		Lamdba@Edge (CDN with CloudFront)
+			lambda deployed globally, for each region in CloudFront
+		asnycronous invocation - S3, SNS, CloudWatch
+			queue events
+			3 tries in total invocation (0,1,2 min) - could process multiple times - idempotent execution = same results
+			duplicate log entries
+			DLQ (dead-letter queue)
+		CloudWatch Events / EventBridge - example CRON job triggers
+		S3 - object events
+		Event source mapping - Kinesis, SQS, DynamoDB
+			record need to be polled from the source
+			lambda invoked syncronously
+			Streams:
+				up to 10 processor per shard
+				error block the shard processing
+					discard old event
+					restict retry
+					split the batch to smaller
+			Queue:
+				long polled queue
+				specific batch size (1-10)
+	Lambda Destinations (2019 Nov)
+		successful and failed event destinations:
+			SQS, SNS, Lambda, EventBridge bus
+
+
+
+
+
+
+
+
+Hands-on:
+
+aws lambda invoke --function-name hello-world-test --payload '{"key1": "value1", "key2": "value2", "key3": "value3"}' --invocation-type Event --region eu-central-1 response.json
